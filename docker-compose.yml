@@ -1,0 +1,72 @@
+# ================================================================
+# Docker Compose - Patas Sem Lar
+# PostgreSQL Database Local Development
+# ================================================================
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:17-alpine
+    container_name: patas-sem-lar-db
+
+    environment:
+      POSTGRES_DB: patas_sem_lar
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: my_secure_dev_password
+
+      # Configurações adicionais
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=pt_PT.UTF-8"
+      TZ: Europe/Lisbon
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      # Persistência de dados
+      - postgres_data:/var/lib/postgresql/data
+
+      # Scripts de inicialização (opcional)
+      # - ./init-scripts:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d patas_sem_lar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - patas-network
+
+  # pgAdmin - Interface Web para gerenciar PostgreSQL
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: patas-sem-lar-pgadmin
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@patassemlar.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+
+    ports:
+      - "5050:80"
+
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    depends_on:
+      - postgres
+
+    networks:
+      - patas-network
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  patas-network:
+    driver: bridge
