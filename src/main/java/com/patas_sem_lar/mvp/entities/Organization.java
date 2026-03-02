@@ -93,6 +93,19 @@ public class Organization implements UserDetails {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Animal> animals;
 
+
+
+    public Organization(String email, String passwordEncript, String slug, String phone, String name, String city, String addressLine1, String postalCode) {
+        this.email = email;
+        this.password_hash = passwordEncript;
+        this.addressLine1 = addressLine1;
+        this.slug = slug;
+        this.phone = phone;
+        this.city = city;
+        this.name = name;
+        this.postalCode = postalCode;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
