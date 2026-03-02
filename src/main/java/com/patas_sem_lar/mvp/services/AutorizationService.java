@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 public class AutorizationService implements UserDetailsService {
 
     @Autowired
-    OrganizationRepository repostory;
+    private final OrganizationRepository repository;
+
+    public AutorizationService(OrganizationRepository repository) {
+        this.repository = repository;
+    }
 
 
     //Service para permitir que o Spring Security possa consultar o banco de dados //
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repostory.findByName(username);
+        return repository.findByEmail(username);
     }
 }

@@ -26,7 +26,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("patas-api")
-                    .withSubject(organization.getName())
+                    .withSubject(organization.getEmail())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;
@@ -36,7 +36,7 @@ public class TokenService {
         }
     }
 
-
+    //Faz a consulta do Token//
     public String validateToken(String token){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -46,7 +46,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         }catch (JWTVerificationException exception){
-            return "";
+            return null;
 
         }
     }
