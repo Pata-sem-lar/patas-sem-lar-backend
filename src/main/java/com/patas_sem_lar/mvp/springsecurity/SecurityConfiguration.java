@@ -10,7 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity // Habilita a configuração do Spring Security
 public class SecurityConfiguration {
 
     //Configurando o Spring Security o deixando STATELESS
