@@ -1,4 +1,4 @@
-package com.patas_sem_lar.mvp.springsecurity;
+/*package com.patas_sem_lar.mvp.springsecurity;
 
 
 import com.auth0.jwt.JWT;
@@ -54,3 +54,4 @@ public class TokenService {
         return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("+00:00"));
     }
 }
+*/

@@ -5,13 +5,15 @@ import com.patas_sem_lar.mvp.dto.AuthenticationDTO;
 import com.patas_sem_lar.mvp.dto.RegisterDTO;
 import com.patas_sem_lar.mvp.entities.Organization;
 import com.patas_sem_lar.mvp.repositories.OrganizationRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,14 +25,15 @@ public class AuthenticationController {
     @Autowired
     private OrganizationRepository repository;
 
-    @GetMapping("/login")
+
+    @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO data){
     var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password_hash());
     var auth = this.authenticationManager.authenticate(usernamePassword);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO dto){
         if(this.repository.findByEmail(dto.email()) != null){
             return  ResponseEntity.badRequest().build();
@@ -41,6 +44,16 @@ public class AuthenticationController {
         this.repository.save(organization);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/list")
+    public List<Organization> list(){
+        return repository.findAll();
+    }
+
+    @GetMapping("/teste")
+    public String teste(){
+        return "hello, world";
     }
 
 

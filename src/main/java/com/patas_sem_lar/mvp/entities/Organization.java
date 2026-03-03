@@ -126,12 +126,13 @@ public class Organization implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+
+        return getPassword_hash();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return getEmail();
     }
 
     @Override

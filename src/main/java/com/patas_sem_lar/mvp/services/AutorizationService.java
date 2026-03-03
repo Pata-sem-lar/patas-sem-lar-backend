@@ -1,6 +1,7 @@
 package com.patas_sem_lar.mvp.services;
 
 
+import com.patas_sem_lar.mvp.entities.Organization;
 import com.patas_sem_lar.mvp.repositories.OrganizationRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,15 +24,20 @@ public class AutorizationService implements UserDetailsService {
 
     //Service para permitir que o Spring Security possa consultar o banco de dados //
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+     return repository.findByEmail(email);
     }
 
+
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration){
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
+
+    // Método usado pelo Spring Security para usar o encode na password
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
