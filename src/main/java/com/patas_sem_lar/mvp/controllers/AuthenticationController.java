@@ -3,8 +3,10 @@ package com.patas_sem_lar.mvp.controllers;
 
 import com.patas_sem_lar.mvp.dto.AuthenticationDTO;
 import com.patas_sem_lar.mvp.dto.RegisterDTO;
+import com.patas_sem_lar.mvp.dto.TokenResponse;
 import com.patas_sem_lar.mvp.entities.Organization;
 import com.patas_sem_lar.mvp.repositories.OrganizationRepository;
+import com.patas_sem_lar.mvp.springsecurity.TokenService;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,19 @@ public class AuthenticationController {
     @Autowired
     private OrganizationRepository repository;
 
+    @Autowired
+    TokenService tokenService;
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthenticationDTO data){
+
     var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password_hash());
+
     var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+
+    var token = tokenService.TokenGenerate((Organization) auth.getPrincipal());
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 
     @PostMapping("/register")
