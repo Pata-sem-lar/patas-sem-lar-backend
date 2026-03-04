@@ -30,35 +30,29 @@ public class Organization implements UserDetails {
     private String passwordHash;
 
     @Column(nullable = false, unique = true)
-    private String slug;
-
-    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String phone;
 
     @Column(name = "website_url")
     private String websiteUrl;
 
-    @Column(name = "address_line1", nullable = false)
+    @Column(name = "address_line1")
     private String addressLine1;
 
     @Column(name = "address_line2")
     private String addressLine2;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String city;
 
     @Column(name = "state_province", length = 100)
     private String stateProvince;
 
     // TODO: Incluir funcionalidade para verificar postalCode correto
-    @Column(name = "postal_code", nullable = false, length = 20)
+    @Column(name = "postal_code", length = 20)
     private String postalCode;
-
-    @Column(length = 100)
-    private String country = "Portugal";
 
     /*
     @Column(precision = 10, scale = 8)
@@ -67,9 +61,6 @@ public class Organization implements UserDetails {
     private BigDecimal longitude;
     */
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
     // TODO: Incluir link para a logo da associacao
     @Column(name = "logo_url", length = 500)
     private String logoUrl;
@@ -77,12 +68,6 @@ public class Organization implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "registration_type", length = 50)
     private RegistrationType registrationType;
-
-    @Column(name = "adoption_process_description", columnDefinition = "TEXT")
-    private String adoptionProcessDescription;
-
-    @Column(name = "total_animals_posted")
-    private Integer totalAnimalsPosted = 0;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -109,11 +94,6 @@ public class Organization implements UserDetails {
         this.email = dto.email();
         this.passwordHash = passwordHash;
         this.name = dto.name();
-        this.phone = dto.phone();
-        this.city = dto.city();
-        this.slug = dto.slug();
-        this.addressLine1 = dto.addressLine1();
-        this.postalCode = dto.postalCode();
     }
 
     @Override

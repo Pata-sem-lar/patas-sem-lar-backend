@@ -11,10 +11,6 @@ public record RegisterDTO(
         @NotBlank
         @Size(min = 8, message = "A palavra-passe deve ter no mínimo 8 caracteres")
         String password,
-        String name,
-        String slug,
-        String phone,
-        String addressLine1,
-        String city,
-        String postalCode) {
+        @NotBlank(message = "Insira o nome da sua Associação")
+        String name) {
 }
