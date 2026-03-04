@@ -40,7 +40,7 @@ public class OrganizationService {
     public ResponseEntity<TokenResponse> login(AuthenticationDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.TokenGenerate((Organization) auth.getPrincipal());
+        var token = tokenService.generateToken((Organization) auth.getPrincipal());
 
         return ResponseEntity.ok(new TokenResponse(token));
     }

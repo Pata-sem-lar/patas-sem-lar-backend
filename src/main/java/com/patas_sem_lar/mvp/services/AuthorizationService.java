@@ -28,14 +28,12 @@ public class AuthorizationService implements UserDetailsService {
         return repository.findByEmail(email);
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-
-    // Método usado pelo Spring Security para usar o encode na password
+    //Método usado pelo Spring Security para usar o encode na password
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
