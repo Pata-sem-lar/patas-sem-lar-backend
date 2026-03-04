@@ -1,7 +1,7 @@
 package com.patas_sem_lar.mvp.springsecurity;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,14 +13,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity // Habilita a configuração do Spring Security
+@RequiredArgsConstructor // Substitui ter de construir manualmente o construtor
 public class SecurityConfiguration {
     //Configurando o Spring Security o deixando STATELESS
-
-    @Autowired
-    SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChan(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
