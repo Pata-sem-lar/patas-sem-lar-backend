@@ -1,7 +1,6 @@
 package com.patas_sem_lar.mvp.services;
 
 
-import com.patas_sem_lar.mvp.entities.Organization;
 import com.patas_sem_lar.mvp.repositories.OrganizationRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,11 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AutorizationService implements UserDetailsService {
+public class AuthorizationService implements UserDetailsService {
 
     private final OrganizationRepository repository;
 
-    public AutorizationService(OrganizationRepository repository) {
+    public AuthorizationService(OrganizationRepository repository) {
         this.repository = repository;
     }
 
@@ -26,9 +25,8 @@ public class AutorizationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-     return repository.findByEmail(email);
+        return repository.findByEmail(email);
     }
-
 
 
     @Bean
@@ -39,7 +37,7 @@ public class AutorizationService implements UserDetailsService {
 
     // Método usado pelo Spring Security para usar o encode na password
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
