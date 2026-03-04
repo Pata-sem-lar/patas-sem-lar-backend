@@ -21,7 +21,7 @@ public class TokenService {
     private String secret;
 
     //Geração do Token - Encripta os dados//
-    public String TokenGenerate(Organization organization) {
+    public String generateToken(Organization organization) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
@@ -50,6 +50,6 @@ public class TokenService {
     }
 
     private Instant genExpirationDate() {
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("+00:00"));
+        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.UTC);
     }
 }

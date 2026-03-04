@@ -34,11 +34,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             var subject = tokenService.validateToken(token);
 
             //procura o Organização no banco de dados.
-            UserDetails organization = organizationRepository.findByEmail(subject);
-
-            var authentication = new UsernamePasswordAuthenticationToken(organization, null, organization.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (subject != null) {
+                UserDetails organization = organizationRepository.findByEmail(subject);
+                var authentication = new UsernamePasswordAuthenticationToken(organization, null, organization.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         //chama o proximo Filtro
         filterChain.doFilter(request, response);

@@ -19,8 +19,6 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     List<Animal> findByOrganizationId(Long organizationId);
 
-    Optional<Animal> findBySlug(String slug);
-
     // Custom query
     @Query("SELECT ani FROM animals ani WHERE ani.status = 'ACTIVE'")
     List<Animal> findAvailableAnimals();
