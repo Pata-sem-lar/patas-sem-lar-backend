@@ -6,65 +6,43 @@ import com.patas_sem_lar.mvp.dto.RegisterDTO;
 import com.patas_sem_lar.mvp.dto.TokenResponse;
 import com.patas_sem_lar.mvp.entities.Organization;
 import com.patas_sem_lar.mvp.repositories.OrganizationRepository;
+import com.patas_sem_lar.mvp.services.OrganizationService;
 import com.patas_sem_lar.mvp.springsecurity.TokenService;
-import org.aspectj.weaver.ast.Or;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private OrganizationRepository repository;
-
-    @Autowired
-    TokenService tokenService;
-
+    private final AuthenticationManager authenticationManager;
+    private final OrganizationRepository orgRepository;
+    private final TokenService tokenService;
+    private final OrganizationService organizationService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationDTO data){
-
-    var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password_hash());
-
-    var auth = this.authenticationManager.authenticate(usernamePassword);
-
-    var token = tokenService.TokenGenerate((Organization) auth.getPrincipal());
-        return ResponseEntity.ok(new TokenResponse(token));
+    public ResponseEntity login(@Valid @RequestBody AuthenticationDTO dto) {
+        return organizationService.login(dto);
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterDTO dto){
-        if(this.repository.findByEmail(dto.email()) != null){
-            return  ResponseEntity.badRequest().build();
-        }
-        String passwordEncript = new BCryptPasswordEncoder().encode(dto.password_hash());
-
-        Organization organization = new Organization(dto.email(), passwordEncript, dto.postalCode(), dto.slug(), dto.phone(), dto.name(), dto.city(), dto.addressLine1());
-        this.repository.save(organization);
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity register(@Valid @RequestBody RegisterDTO dto) {
+        return organizationService.register(dto);
     }
 
     @GetMapping("/list")
-    public List<Organization> list(){
-        return repository.findAll();
+    public List<Organization> list() {
+        return orgRepository.findAll();
     }
 
     @GetMapping("/teste")
-    public String teste(){
+    public String teste() {
         return "hello, world";
     }
-
-
-
 }
