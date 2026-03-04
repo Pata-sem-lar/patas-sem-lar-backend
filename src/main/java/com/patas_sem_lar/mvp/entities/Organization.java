@@ -1,5 +1,6 @@
 package com.patas_sem_lar.mvp.entities;
 
+import com.patas_sem_lar.mvp.dto.RegisterDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class Organization implements UserDetails {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String password_hash;
+    private String passwordHash;
 
     @Column(nullable = false, unique = true)
     private String slug;
@@ -93,19 +94,6 @@ public class Organization implements UserDetails {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Animal> animals;
 
-
-
-    public Organization(String email, String passwordEncript, String slug, String phone, String name, String city, String addressLine1, String postalCode) {
-        this.email = email;
-        this.password_hash = passwordEncript;
-        this.addressLine1 = addressLine1;
-        this.slug = slug;
-        this.phone = phone;
-        this.city = city;
-        this.name = name;
-        this.postalCode = postalCode;
-    }
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -117,22 +105,31 @@ public class Organization implements UserDetails {
         updatedAt = LocalDateTime.now();
     }
 
+    public Organization(RegisterDTO dto, String passwordHash) {
+        this.email = dto.email();
+        this.passwordHash = passwordHash;
+        this.name = dto.name();
+        this.phone = dto.phone();
+        this.city = dto.city();
+        this.slug = dto.slug();
+        this.addressLine1 = dto.addressLine1();
+        this.postalCode = dto.postalCode();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
     //Métodos do UserDetails para validação //
-
     @Override
     public @Nullable String getPassword() {
-
-        return getPassword_hash();
+        return getPasswordHash();
     }
 
     @Override
     public String getUsername() {
-        return getEmail();
+        return getName();
     }
 
     @Override
