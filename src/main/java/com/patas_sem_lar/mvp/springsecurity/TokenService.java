@@ -21,8 +21,8 @@ public class TokenService {
     private String secret;
 
     //Geração do Token - Encripta os dados//
-    public String TokenGenerate(Organization organization){
-        try{
+    public String TokenGenerate(Organization organization) {
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("patas-api")
@@ -30,27 +30,26 @@ public class TokenService {
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;
-        } catch (JWTCreationException exeption){
-            throw new RuntimeException("Erro geração token", exeption);
-
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro geração token: ", exception);
         }
     }
 
     //Faz a consulta do Token//
-    public String validateToken(String token){
-        try{
+    public String validateToken(String token) {
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer("patas-api")
                     .build()
                     .verify(token)
                     .getSubject();
-        }catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             return null;
-
         }
     }
-    private Instant genExpirationDate(){
+
+    private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("+00:00"));
     }
 }
