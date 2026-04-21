@@ -6,13 +6,13 @@ from app.models.servico import Servico
 from app.models.usuario import Usuario
 from app.schemas.servico import ServicoCreate, ServicoUpdate
 from app.services.profissional_service import buscar_profissional
-from app.services.loja_service import buscar_loja
+from app.services.loja_service import get_loja
 
 
 async def _verificar_dono(db: AsyncSession, profissional_id: str, admin: Usuario) -> None:
     """Verifica se o admin é dono da loja do profissional."""
     profissional = await buscar_profissional(db, profissional_id)
-    loja = await buscar_loja(db, profissional.loja_id)
+    loja = await get_loja(db, profissional.loja_id)
     if loja.owner_id != admin.id:
         raise HTTPException(status_code=403, detail="Acesso negado")
 

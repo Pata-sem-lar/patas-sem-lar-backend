@@ -1,11 +1,10 @@
 from datetime import datetime, date, timedelta, timezone, time
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select
 from fastapi import HTTPException
 
 from app.models.agendamento import Agendamento, StatusEnum
 from app.models.horario_trabalho import HorarioTrabalho
-from app.models.servico import Servico
 from app.models.usuario import Usuario
 from app.schemas.agendamento import AgendamentoCreate, AgendamentoUpdate, SlotDisponivel
 from app.services.profissional_service import buscar_profissional
@@ -201,8 +200,8 @@ async def listar_agendamentos_do_profissional(
     eh_o_proprio = profissional.usuario_id == usuario.id
 
     # Admin da loja vendo a agenda de um profissional da sua loja
-    from app.services.loja_service import buscar_loja
-    loja = await buscar_loja(db, profissional.loja_id)
+    from app.services.loja_service import get_loja
+    loja = await get_loja(db, profissional.loja_id)
     eh_admin_da_loja = loja.owner_id == usuario.id
 
     if not eh_o_proprio and not eh_admin_da_loja:
@@ -250,8 +249,8 @@ async def atualizar_status(
     # Verifica se o usuário tem permissão sobre este agendamento
     from app.services.profissional_service import buscar_profissional as bp
     profissional = await bp(db, ag.profissional_id)
-    from app.services.loja_service import buscar_loja
-    loja = await buscar_loja(db, profissional.loja_id)
+    from app.services.loja_service import get_loja
+    loja = await get_loja(db, profissional.loja_id)
 
     eh_cliente = ag.cliente_id == usuario.id
     eh_profissional = profissional.usuario_id == usuario.id

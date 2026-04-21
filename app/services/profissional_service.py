@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from app.models.profissional import Profissional
 from app.models.usuario import Usuario, RoleEnum
 from app.schemas.profissional import ProfissionalCreate, ProfissionalUpdate
-from app.services.loja_service import buscar_loja
+from app.services.loja_service import get_loja
 
 
 async def adicionar_profissional(
@@ -19,7 +19,7 @@ async def adicionar_profissional(
     Só o dono da loja pode fazer isso.
     O usuário referenciado deve ter role=profissional.
     """
-    loja = await buscar_loja(db, loja_id)
+    loja = await get_loja(db, loja_id)
 
     if loja.owner_id != admin.id:
         raise HTTPException(status_code=403, detail="Apenas o dono da loja pode adicionar profissionais")
@@ -64,7 +64,7 @@ async def listar_profissionais_da_loja(
     db: AsyncSession, loja_id: str
 ) -> list[Profissional]:
     """Lista os profissionais ativos de uma loja. Rota pública."""
-    await buscar_loja(db, loja_id)  # garante que a loja existe
+    await get_loja(db, loja_id)  # garante que a loja existe
     result = await db.execute(
         select(Profissional).where(
             Profissional.loja_id == loja_id,
@@ -95,7 +95,7 @@ async def atualizar_profissional(
     admin: Usuario,
 ) -> Profissional:
     profissional = await buscar_profissional(db, profissional_id)
-    loja = await buscar_loja(db, profissional.loja_id)
+    loja = await get_loja(db, profissional.loja_id)
 
     if loja.owner_id != admin.id:
         raise HTTPException(status_code=403, detail="Apenas o dono da loja pode editar profissionais")
@@ -115,7 +115,7 @@ async def remover_profissional(
     from datetime import datetime, timezone
 
     profissional = await buscar_profissional(db, profissional_id)
-    loja = await buscar_loja(db, profissional.loja_id)
+    loja = await get_loja(db, profissional.loja_id)
 
     if loja.owner_id != admin.id:
         raise HTTPException(status_code=403, detail="Apenas o dono da loja pode remover profissionais")
