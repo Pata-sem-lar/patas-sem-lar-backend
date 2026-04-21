@@ -10,7 +10,7 @@ from app.routers.agendamentos import router as agendamentos_router
 
 app = FastAPI(
     title="Agendei API",
-    description="Sistema de agendamentos para salões e clínicas",
+    description="Sistema de agendamentos para salões",
     version="0.3.0",
 )
 
