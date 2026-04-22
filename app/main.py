@@ -3,9 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.routers import auth as auth_router
-from app.routers import loja as loja_router
+from app.routers.loja import router as loja_router
+from app.routers.profissionais import router as profissionais_router
+from app.routers.servicos_horarios import servicos_router, horarios_router
+from app.routers.agendamentos import router as agendamentos_router
 
-app = FastAPI()
+app = FastAPI(
+    title="Agendei API",
+    description="Sistema de agendamentos para salões",
+    version="0.3.0",
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,5 +22,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth_router.router, prefix="/api/v1")
-app.include_router(loja_router.router, prefix="/api/v1")
+PREFIX = "/api/v1"
+
+app.include_router(auth_router.router,      prefix=PREFIX)
+app.include_router(loja_router,             prefix=PREFIX)
+app.include_router(profissionais_router,    prefix=PREFIX)
+app.include_router(servicos_router,         prefix=PREFIX)
+app.include_router(horarios_router,         prefix=PREFIX)
+app.include_router(agendamentos_router,     prefix=PREFIX)
