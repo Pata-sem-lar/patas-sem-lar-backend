@@ -1,19 +1,18 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from datetime import datetime, timezone
+
 from fastapi import HTTPException
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.servico import Servico
 from app.models.usuario import Usuario
 from app.schemas.servico import ServicoCreate, ServicoUpdate
 from app.services.profissional_service import buscar_profissional
-from app.services.loja_service import get_loja
 
 
-async def _verificar_dono(db: AsyncSession, profissional_id: str, admin: Usuario) -> None:
-    """Verifica se o admin é dono da loja do profissional."""
+async def _verificar_dono(db: AsyncSession, profissional_id: str, usuario: Usuario) -> None:
     profissional = await buscar_profissional(db, profissional_id)
-    loja = await get_loja(db, profissional.loja_id)
-    if loja.owner_id != admin.id:
+    if profissional.usuario_id != usuario.id:
         raise HTTPException(status_code=403, detail="Acesso negado")
 
 
@@ -21,9 +20,9 @@ async def criar_servico(
     db: AsyncSession,
     profissional_id: str,
     data: ServicoCreate,
-    admin: Usuario,
+    usuario: Usuario,
 ) -> Servico:
-    await _verificar_dono(db, profissional_id, admin)
+    await _verificar_dono(db, profissional_id, usuario)
 
     servico = Servico(
         profissional_id=profissional_id,
@@ -41,8 +40,7 @@ async def criar_servico(
 async def listar_servicos_do_profissional(
     db: AsyncSession, profissional_id: str
 ) -> list[Servico]:
-    """Rota pública — clientes precisam ver os serviços disponíveis."""
-    await buscar_profissional(db, profissional_id)  # garante que existe
+    await buscar_profissional(db, profissional_id)
     result = await db.execute(
         select(Servico).where(
             Servico.profissional_id == profissional_id,
@@ -70,13 +68,12 @@ async def atualizar_servico(
     db: AsyncSession,
     servico_id: str,
     data: ServicoUpdate,
-    admin: Usuario,
+    usuario: Usuario,
 ) -> Servico:
     servico = await buscar_servico(db, servico_id)
-    await _verificar_dono(db, servico.profissional_id, admin)
+    await _verificar_dono(db, servico.profissional_id, usuario)
 
-    campos = data.model_dump(exclude_unset=True)
-    for campo, valor in campos.items():
+    for campo, valor in data.model_dump(exclude_unset=True).items():
         setattr(servico, campo, valor)
 
     await db.commit()
@@ -85,12 +82,10 @@ async def atualizar_servico(
 
 
 async def deletar_servico(
-    db: AsyncSession, servico_id: str, admin: Usuario
+    db: AsyncSession, servico_id: str, usuario: Usuario
 ) -> None:
-    from datetime import datetime, timezone
-
     servico = await buscar_servico(db, servico_id)
-    await _verificar_dono(db, servico.profissional_id, admin)
+    await _verificar_dono(db, servico.profissional_id, usuario)
 
     servico.deleted_at = datetime.now(timezone.utc)
     await db.commit()

@@ -1,18 +1,16 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from fastapi import HTTPException
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.horario_trabalho import HorarioTrabalho
 from app.models.usuario import Usuario
 from app.schemas.horario_trabalho import HorarioTrabalhoCreate, HorarioTrabalhoUpdate
 from app.services.profissional_service import buscar_profissional
-from app.services.loja_service import get_loja
 
 
-async def _verificar_dono(db: AsyncSession, profissional_id: str, admin: Usuario) -> None:
+async def _verificar_dono(db: AsyncSession, profissional_id: str, usuario: Usuario) -> None:
     profissional = await buscar_profissional(db, profissional_id)
-    loja = await get_loja(db, profissional.loja_id)
-    if loja.owner_id != admin.id:
+    if profissional.usuario_id != usuario.id:
         raise HTTPException(status_code=403, detail="Acesso negado")
 
 
@@ -20,11 +18,10 @@ async def criar_horario(
     db: AsyncSession,
     profissional_id: str,
     data: HorarioTrabalhoCreate,
-    admin: Usuario,
+    usuario: Usuario,
 ) -> HorarioTrabalho:
-    await _verificar_dono(db, profissional_id, admin)
+    await _verificar_dono(db, profissional_id, usuario)
 
-    # Um profissional só pode ter um horário ativo por dia da semana
     ja_existe = await db.execute(
         select(HorarioTrabalho).where(
             HorarioTrabalho.profissional_id == profissional_id,
@@ -53,7 +50,6 @@ async def criar_horario(
 async def listar_horarios_do_profissional(
     db: AsyncSession, profissional_id: str
 ) -> list[HorarioTrabalho]:
-    """Rota pública — clientes precisam saber quando o profissional trabalha."""
     await buscar_profissional(db, profissional_id)
     result = await db.execute(
         select(HorarioTrabalho).where(
@@ -66,7 +62,10 @@ async def listar_horarios_do_profissional(
 
 async def buscar_horario(db: AsyncSession, horario_id: str) -> HorarioTrabalho:
     result = await db.execute(
-        select(HorarioTrabalho).where(HorarioTrabalho.id == horario_id)
+        select(HorarioTrabalho).where(
+            HorarioTrabalho.id == horario_id,
+            HorarioTrabalho.is_active.is_(True),
+        )
     )
     horario = result.scalar_one_or_none()
     if horario is None:
@@ -78,13 +77,12 @@ async def atualizar_horario(
     db: AsyncSession,
     horario_id: str,
     data: HorarioTrabalhoUpdate,
-    admin: Usuario,
+    usuario: Usuario,
 ) -> HorarioTrabalho:
     horario = await buscar_horario(db, horario_id)
-    await _verificar_dono(db, horario.profissional_id, admin)
+    await _verificar_dono(db, horario.profissional_id, usuario)
 
-    campos = data.model_dump(exclude_unset=True)
-    for campo, valor in campos.items():
+    for campo, valor in data.model_dump(exclude_unset=True).items():
         setattr(horario, campo, valor)
 
     await db.commit()
@@ -93,11 +91,10 @@ async def atualizar_horario(
 
 
 async def deletar_horario(
-    db: AsyncSession, horario_id: str, admin: Usuario
+    db: AsyncSession, horario_id: str, usuario: Usuario
 ) -> None:
     horario = await buscar_horario(db, horario_id)
-    await _verificar_dono(db, horario.profissional_id, admin)
+    await _verificar_dono(db, horario.profissional_id, usuario)
 
-    # Horários não têm deleted_at — desativamos com is_active=False
     horario.is_active = False
     await db.commit()
