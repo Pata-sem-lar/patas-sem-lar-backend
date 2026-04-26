@@ -2,20 +2,20 @@ from enum import Enum
 
 from pydantic import BaseModel, EmailStr, field_validator
 
-from app.schemas.usuario import UsuarioPublic
+from app.schemas.user import UserPublic
 
 
 class PublicRoleEnum(str, Enum):
-    cliente = "cliente"
-    admin_loja = "admin_loja"
+    client = "client"
+    store_admin = "store_admin"
 
 
 class RegisterRequest(BaseModel):
-    nome: str
+    name: str
     email: EmailStr
     password: str
     role: PublicRoleEnum
-    telefone: str | None = None
+    phone: str | None = None
     accepted_terms: bool
 
     @field_validator("password")
@@ -41,4 +41,4 @@ class LoginRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    user: UsuarioPublic
+    user: UserPublic

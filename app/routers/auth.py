@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.db.session import get_db
 from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse
-from app.schemas.usuario import UsuarioPublic
+from app.schemas.user import UserPublic
 from app.services import auth_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -37,7 +37,7 @@ async def register(
     _set_refresh_cookie(response, refresh_token)
     return TokenResponse(
         access_token=access_token,
-        user=UsuarioPublic.model_validate(usuario),
+        user=UserPublic.model_validate(usuario),
     )
 
 
@@ -51,7 +51,7 @@ async def login(
     _set_refresh_cookie(response, refresh_token)
     return TokenResponse(
         access_token=access_token,
-        user=UsuarioPublic.model_validate(usuario),
+        user=UserPublic.model_validate(usuario),
     )
 
 
@@ -70,7 +70,7 @@ async def refresh(
     _set_refresh_cookie(response, refresh_token)
     return TokenResponse(
         access_token=new_access_token,
-        user=UsuarioPublic.model_validate(usuario),
+        user=UserPublic.model_validate(usuario),
     )
 
 

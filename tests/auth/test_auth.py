@@ -7,10 +7,10 @@ REFRESH_URL = "/api/v1/auth/refresh"
 LOGOUT_URL = "/api/v1/auth/logout"
 
 VALID_USER = {
-    "nome": "Test User",
+    "name": "Test User",
     "email": "test@example.com",
     "password": "password123",
-    "role": "cliente",
+    "role": "client",
     "accepted_terms": True,
 }
 
@@ -27,11 +27,11 @@ async def test_register_success(client: AsyncClient):
     assert "access_token" in body
     assert body["token_type"] == "bearer"
     assert body["user"]["email"] == VALID_USER["email"]
-    assert body["user"]["nome"] == VALID_USER["nome"]
+    assert body["user"]["name"] == VALID_USER["name"]
     assert body["user"]["role"] == VALID_USER["role"]
     assert "id" in body["user"]
     assert "password" not in body
-    assert "senha_hash" not in body
+    assert "password_hash" not in body
 
 
 async def test_register_duplicate_email(client: AsyncClient):

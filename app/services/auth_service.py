@@ -7,66 +7,62 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import security
 from app.core.config import settings
-from app.models.usuario import Usuario
+from app.models.user import User
 from app.schemas.auth import LoginRequest, RegisterRequest
 
 
-async def register(db: AsyncSession, data: RegisterRequest) -> tuple[str, str, Usuario]:
+async def register(db: AsyncSession, data: RegisterRequest) -> tuple[str, str, User]:
     result = await db.execute(
-        select(Usuario).where(
-            Usuario.email == data.email,
-            Usuario.deleted_at.is_(None),
+        select(User).where(
+            User.email == data.email,
+            User.deleted_at.is_(None),
         )
     )
     if result.scalar_one_or_none() is not None:
         raise HTTPException(status_code=409, detail="Email já cadastrado")
 
-    usuario = Usuario(
-        nome=data.nome,
+    user = User(
+        name=data.name,
         email=data.email,
-        senha_hash=security.hash_password(data.password),
+        password_hash=security.hash_password(data.password),
         role=data.role,
-        telefone=data.telefone,
+        phone=data.phone,
         accepted_terms_at=datetime.now(timezone.utc),
         accepted_terms_version=settings.current_terms_version,
     )
-    db.add(usuario)
+    db.add(user)
     await db.commit()
-    await db.refresh(usuario)
+    await db.refresh(user)
 
-    access_token = security.create_access_token(
-        {"sub": usuario.id, "role": usuario.role}
-    )
-    refresh_token = security.create_refresh_token({"sub": usuario.id})
-    return access_token, refresh_token, usuario
+    access_token = security.create_access_token({"sub": user.id, "role": user.role})
+    refresh_token = security.create_refresh_token({"sub": user.id})
+    return access_token, refresh_token, user
 
 
 async def login(
     db: AsyncSession, data: LoginRequest
-) -> tuple[str, str, Usuario]:
+) -> tuple[str, str, User]:
     result = await db.execute(
-        select(Usuario).where(
-            Usuario.email == data.email,
-            Usuario.deleted_at.is_(None),
+        select(User).where(
+            User.email == data.email,
+            User.deleted_at.is_(None),
         )
     )
-    usuario = result.scalar_one_or_none()
+    user = result.scalar_one_or_none()
 
     # Same message whether email doesn't exist or password is wrong —
     # nunca revelar qual o valor que estava incorreto no login.
-    if usuario is None or not security.verify_password(data.password, usuario.senha_hash):
+    if user is None or not security.verify_password(data.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
-    access_token = security.create_access_token(
-        {"sub": usuario.id, "role": usuario.role}
-    )
-    refresh_token = security.create_refresh_token({"sub": usuario.id})
-    return access_token, refresh_token, usuario
+    access_token = security.create_access_token({"sub": user.id, "role": user.role})
+    refresh_token = security.create_refresh_token({"sub": user.id})
+    return access_token, refresh_token, user
 
 
 async def refresh(
     db: AsyncSession, refresh_token: str
-) -> tuple[str, Usuario]:
+) -> tuple[str, User]:
     try:
         payload = security.decode_token(refresh_token)
     except JWTError:
@@ -77,16 +73,14 @@ async def refresh(
         raise HTTPException(status_code=401, detail="Token inválido")
 
     result = await db.execute(
-        select(Usuario).where(
-            Usuario.id == user_id,
-            Usuario.deleted_at.is_(None),
+        select(User).where(
+            User.id == user_id,
+            User.deleted_at.is_(None),
         )
     )
-    usuario = result.scalar_one_or_none()
-    if usuario is None:
+    user = result.scalar_one_or_none()
+    if user is None:
         raise HTTPException(status_code=401, detail="Usuário não encontrado")
 
-    access_token = security.create_access_token(
-        {"sub": usuario.id, "role": usuario.role}
-    )
-    return access_token, usuario
+    access_token = security.create_access_token({"sub": user.id, "role": user.role})
+    return access_token, user

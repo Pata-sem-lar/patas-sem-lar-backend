@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import security
 from app.db.session import get_db
-from app.models.usuario import RoleEnum, Usuario
+from app.models.user import RoleEnum, User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -14,7 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: AsyncSession = Depends(get_db),
-) -> Usuario:
+) -> User:
     credentials_exception = HTTPException(
         status_code=401,
         detail="Token inválido ou expirado",
@@ -31,22 +31,22 @@ async def get_current_user(
         raise credentials_exception
 
     result = await db.execute(
-        select(Usuario).where(
-            Usuario.id == user_id,
-            Usuario.deleted_at.is_(None),
+        select(User).where(
+            User.id == user_id,
+            User.deleted_at.is_(None),
         )
     )
-    usuario = result.scalar_one_or_none()
-    if usuario is None:
+    user = result.scalar_one_or_none()
+    if user is None:
         raise credentials_exception
 
-    return usuario
+    return user
 
 
 def require_role(*roles: RoleEnum):
     def role_checker(
-        current_user: Usuario = Depends(get_current_user),
-    ) -> Usuario:
+        current_user: User = Depends(get_current_user),
+    ) -> User:
         if current_user.role not in roles:
             raise HTTPException(status_code=403, detail="Acesso negado")
         return current_user

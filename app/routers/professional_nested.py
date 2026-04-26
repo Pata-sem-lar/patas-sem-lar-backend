@@ -1,0 +1,133 @@
+from datetime import date
+
+from fastapi import APIRouter, Depends, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependencies import get_current_user, require_role
+from app.db.session import get_db
+from app.models.user import RoleEnum, User
+from app.schemas.appointment import AppointmentPublic, AvailableSlot
+from app.schemas.offering import OfferingCreate, OfferingPublic, OfferingUpdate
+from app.schemas.work_schedule import WorkScheduleCreate, WorkSchedulePublic, WorkScheduleUpdate
+from app.services import appointment_service, offering_service, work_schedule_service
+
+professionals_router = APIRouter(
+    prefix="/professionals/{professional_id}",
+    tags=["professionals"],
+)
+
+offerings_router = APIRouter(
+    prefix="/professionals/{professional_id}/offerings",
+    tags=["offerings"],
+)
+
+schedules_router = APIRouter(
+    prefix="/professionals/{professional_id}/schedules",
+    tags=["schedules"],
+)
+
+
+# ---------------------------------------------------------------------------
+# Professional-level endpoints
+# ---------------------------------------------------------------------------
+
+
+@professionals_router.get("/available-slots", response_model=list[AvailableSlot])
+async def list_available_slots(
+    professional_id: str,
+    offering_id: str = Query(..., description="Offering ID"),
+    on_date: date = Query(..., alias="date", description="Date in YYYY-MM-DD format"),
+    db: AsyncSession = Depends(get_db),
+):
+    return await appointment_service.list_available_slots(db, professional_id, offering_id, on_date)
+
+
+@professionals_router.get("/appointments", response_model=list[AppointmentPublic])
+async def list_professional_appointments(
+    professional_id: str,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    return await appointment_service.list_professional_appointments(db, professional_id, user)
+
+
+# ---------------------------------------------------------------------------
+# Offerings
+# ---------------------------------------------------------------------------
+
+
+@offerings_router.post("", response_model=OfferingPublic, status_code=status.HTTP_201_CREATED)
+async def create_offering(
+    professional_id: str,
+    data: OfferingCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role(RoleEnum.professional, RoleEnum.store_admin)),
+):
+    return await offering_service.create_offering(db, professional_id, data, user)
+
+
+@offerings_router.get("", response_model=list[OfferingPublic])
+async def list_offerings(professional_id: str, db: AsyncSession = Depends(get_db)):
+    return await offering_service.list_professional_offerings(db, professional_id)
+
+
+@offerings_router.patch("/{offering_id}", response_model=OfferingPublic)
+async def update_offering(
+    professional_id: str,
+    offering_id: str,
+    data: OfferingUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role(RoleEnum.professional, RoleEnum.store_admin)),
+):
+    return await offering_service.update_offering(db, offering_id, data, user)
+
+
+@offerings_router.delete("/{offering_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_offering(
+    professional_id: str,
+    offering_id: str,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role(RoleEnum.professional, RoleEnum.store_admin)),
+):
+    await offering_service.delete_offering(db, offering_id, user)
+
+
+# ---------------------------------------------------------------------------
+# Work schedules
+# ---------------------------------------------------------------------------
+
+
+@schedules_router.post("", response_model=WorkSchedulePublic, status_code=status.HTTP_201_CREATED)
+async def create_work_schedule(
+    professional_id: str,
+    data: WorkScheduleCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role(RoleEnum.professional, RoleEnum.store_admin)),
+):
+    return await work_schedule_service.create_work_schedule(db, professional_id, data, user)
+
+
+@schedules_router.get("", response_model=list[WorkSchedulePublic])
+async def list_work_schedules(professional_id: str, db: AsyncSession = Depends(get_db)):
+    return await work_schedule_service.list_professional_work_schedules(db, professional_id)
+
+
+@schedules_router.patch("/{schedule_id}", response_model=WorkSchedulePublic)
+async def update_work_schedule(
+    professional_id: str,
+    schedule_id: str,
+    data: WorkScheduleUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role(RoleEnum.professional, RoleEnum.store_admin)),
+):
+    return await work_schedule_service.update_work_schedule(db, schedule_id, data, user)
+
+
+@schedules_router.delete("/{schedule_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_work_schedule(
+    professional_id: str,
+    schedule_id: str,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role(RoleEnum.professional, RoleEnum.store_admin)),
+):
+    await work_schedule_service.delete_work_schedule(db, schedule_id, user)
