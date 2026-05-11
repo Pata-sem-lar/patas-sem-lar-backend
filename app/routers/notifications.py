@@ -10,7 +10,7 @@ from app.schemas.notification import (
 from app.services import notification_service
 from app.models.user import User
 from app.core.dependencies import get_current_user
-from app.models.notification import NotificationType, NotificationStatus
+from app.models.notification import NotificationStatus, RecipientType
 
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
@@ -50,7 +50,7 @@ async def get_notification(
 async def list_notifications(
     status: NotificationStatus | None = Query(None),
     recipient_id: str | None = Query(None),
-    recipient_type: NotificationType | None = Query(None),
+    recipient_type: RecipientType | None = Query(None),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db),

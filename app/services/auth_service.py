@@ -86,7 +86,7 @@ async def refresh(
     if not user_id:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-    user = user_validity(db, user_id)
+    user = await user_validity(db, user_id)
 
     access_token = security.create_access_token({"sub": user.id, "role": user.role})
     return access_token, user
