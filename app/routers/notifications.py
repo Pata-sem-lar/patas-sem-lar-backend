@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -10,6 +10,7 @@ from app.schemas.notification import (
 from app.services import notification_service
 from app.models.user import User
 from app.core.dependencies import get_current_user
+from app.models.notification import NotificationType, NotificationStatus
 
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
@@ -47,12 +48,13 @@ async def get_notification(
     response_model=list[NotificationPublic],
 )
 async def list_notifications(
-    status: str | None = Query(None),
+    status: NotificationStatus | None = Query(None),
     recipient_id: str | None = Query(None),
-    recipient_type: str | None = Query(None),
+    recipient_type: NotificationType | None = Query(None),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
 ):
     return await notification_service.list_notifications(
         db,
@@ -72,8 +74,9 @@ async def update_notification_status(
     notification_id: str,
     data: NotificationUpdateStatus,
     db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
 ):
-    updated = await service.update_status(db, notification_id, data)
+    updated = await notification_service.update_status(db, notification_id, data)
 
     return updated
 
