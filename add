@@ -1,0 +1,333 @@
+[33mcommit c588bd00480fdb17f261bfccab3eb2dd1d05289c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mnotifications[m[33m, [m[1;31morigin/notifications[m[33m)[m
+Author: IsaqueHenrique1 <isaque.do.palmares@gmail.com>
+Date:   Sat May 9 19:45:55 2026 +0100
+
+    feat: add notifications schemas
+
+[33mcommit a56269965e7ada6e26f6d7c07463ea9d6066abb7[m
+Author: IsaqueHenrique1 <isaque.do.palmares@gmail.com>
+Date:   Sat May 9 19:45:11 2026 +0100
+
+    feat: add notifications router
+
+[33mcommit 8b93c9f5f1c20999349cc8988b5b20d90a9ba866[m
+Author: IsaqueHenrique1 <isaque.do.palmares@gmail.com>
+Date:   Sat May 9 19:44:19 2026 +0100
+
+    feat: add notifications service
+
+[33mcommit 648b18df3a11f6abaeee1d9b4af6d50fcbf5dd13[m
+Author: IsaqueHenrique1 <isaque.do.palmares@gmail.com>
+Date:   Sat May 9 19:30:16 2026 +0100
+
+    feat: add notification model
+
+[33mcommit c64ae246ad64ba659b8c89a103e24e2f188c2943[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: 0d929e2 dbe952b
+Author: Wellington Lima <101049432+zWellingtonLima@users.noreply.github.com>
+Date:   Thu May 7 21:13:55 2026 +0100
+
+    Merge pull request #6 from Agendei-IEFP/feat/multi-store-and-invites
+    
+    Feat/multi store and invites
+
+[33mcommit dbe952b0bec8e67f5d150d72ce7a1fc6479bb21d[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:45:39 2026 +0100
+
+    chore: register invite router and add frontend_url config
+
+[33mcommit 746e049f6f9827f88b4ac26d375ac5e5cdf4fa8c[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:45:27 2026 +0100
+
+    test: update professional tests and add invite tests for multi-store changes
+
+[33mcommit 22280e2571a0309b52730715a5f84b18034967a6[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:45:20 2026 +0100
+
+    feat: add professional invite system with optional auth dependency
+
+[33mcommit 0593cc59c17a3d3b553fa544d9d6f7e9dd5cd0fb[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:45:14 2026 +0100
+
+    refactor: update routers to use professional-store paths
+
+[33mcommit 374a29336fac67d2df237f2022da64b948004e97[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:45:08 2026 +0100
+
+    refactor: update appointments to track professional-store context
+
+[33mcommit 4c52b82d23584c37f97bee3460bf93368d2a6297[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:45:00 2026 +0100
+
+    refactor: scope work schedules to professional-store link
+
+[33mcommit 659e5999f4dc35c471ec3fdbfb0e58217cf8e776[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:44:53 2026 +0100
+
+    refactor: scope offerings to professional-store link
+
+[33mcommit 42343638730b7285f6a49047df64f3ebdfd2fcc7[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:44:45 2026 +0100
+
+    refactor: decouple Professional from Store with 1:1 user relationship
+
+[33mcommit bacaec7de09c5d6b2b4a44848b2985e3b70d602c[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun May 3 17:42:52 2026 +0100
+
+    feat: add ProfessionalStore join table and multi-store migration
+
+[33mcommit 0d929e2ed6bfa732ba3f3d86ff51f4b5f8943e86[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 28 11:35:03 2026 +0100
+
+    fix: a
+
+[33mcommit 0bf9040eae62ee8d96b1ac6c999da6fa2aaf46a2[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 26 17:22:26 2026 +0100
+
+    feat: changes `postgres` docker composer version from 16 to 18
+
+[33mcommit 0efec28a6cf5c61175eef4cacb3d5eaf1c0e9871[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 26 17:15:49 2026 +0100
+
+    refactor: translates entire codebase to english
+
+[33mcommit 388445458fc8837e36c67812030d3f47ef6469e9[m
+Merge: e61854d 9ab44a6
+Author: Wellington Lima <101049432+zWellingtonLima@users.noreply.github.com>
+Date:   Wed Apr 22 08:38:19 2026 +0100
+
+    Merge pull request #5 from Agendei-IEFP/feat/loja_fase3
+    
+    Features: adds basic remainings features
+
+[33mcommit 9ab44a643e004b010c16153555e38b86afdba3c2[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Wed Apr 22 08:35:32 2026 +0100
+
+    fix: fix `profissional_service` adicionar_profissional logic to create an prof user
+
+[33mcommit 7abef0557e6191d53f70d29bc523a48b233f85f4[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Wed Apr 22 08:33:36 2026 +0100
+
+    feat: add audit fields at public listing and changes min_duration logic to 15 minutes
+
+[33mcommit 2761ca9bd6f61c7255a136b067c0e550ed9112a5[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Wed Apr 22 08:30:27 2026 +0100
+
+    fix: change `admin` to `usuario` allowing `profissional` manage own services instead of admin
+
+[33mcommit 4d223455df4d789c9d7a8a7fdf1dbadf8795bb35[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Wed Apr 22 08:22:19 2026 +0100
+
+    feat: adds token response to register
+    
+    changes user data schema response adding up access token and setting refresh token to Http only cookies
+
+[33mcommit 0685bcf3c1691d310ffe281046e7733cd700c1fa[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Wed Apr 22 08:19:46 2026 +0100
+
+    feat: include one more restriction to `agendamento_service`
+
+[33mcommit bb997c253ab26f24e81e543d49951cc3c159ec31[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 22:37:02 2026 +0100
+
+    feat: include `motivo` for cancelling an appointment
+
+[33mcommit 037b48760cae2cbd63f2740b07202c95d2771980[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 22:34:39 2026 +0100
+
+    refactor: change `Optional` occurences to `| None` in models and schemas
+
+[33mcommit 1e4ae97a960ad6fd14868d9179354fd072abf2b7[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 21:58:12 2026 +0100
+
+    refactor: rename all `buscar_loja` occurrences to `get_loja`
+
+[33mcommit 0c03f2fa17a923f7c00c87a4f1ecb5f5822dc139[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 21:57:09 2026 +0100
+
+    fix: imports correctly lojas router
+
+[33mcommit 319c4162dcf1b0234d28e0e200bb3405dcca76a0[m
+Merge: d63a637 e61854d
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 21:17:56 2026 +0100
+
+    Merge remote-tracking branch 'origin/main' into feat/loja_fase3
+
+[33mcommit e61854d853ac4eb079e2c53abfcf4ffb07fb343c[m
+Merge: 7715671 3c04560
+Author: Wellington Lima <101049432+zWellingtonLima@users.noreply.github.com>
+Date:   Tue Apr 21 20:55:29 2026 +0100
+
+    Merge pull request #4 from Agendei-IEFP/feat/create-loja
+    
+    Feature: add `loja` flow
+
+[33mcommit 3c04560feb17709e1257d195675d2196730017f1[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 20:53:07 2026 +0100
+
+    refactor: rename occurrences `senha` to `password`
+
+[33mcommit c0cb70bd88fda0ad56e40f66c87efe08766909ef[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 20:51:59 2026 +0100
+
+    test: add loja basic tests
+
+[33mcommit 64d562b6165720e86804535ada7fbfe979a3aa2b[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Tue Apr 21 20:51:33 2026 +0100
+
+    feat: add Loja flow
+    
+    create router, service and schema
+
+[33mcommit d63a637b4ac40b674b5f9df143e8ce352fca9195[m
+Author: Paquetz <tds.joao.oliveira@gmail.com>
+Date:   Tue Apr 21 14:38:52 2026 +0100
+
+    Fase 3 iniciada com schemas services routers e uma mudança no main_py ver o guia 3
+
+[33mcommit 77156715a32eb3e61a9a1823ba6daf30315abd61[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 10:03:09 2026 +0100
+
+    test: adds tests basic setup and auth tests
+
+[33mcommit 61c17774172ec8c8f3376c5f7d1ca44aa5d3d622[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 08:50:11 2026 +0100
+
+    feat: adds authentication flow
+
+[33mcommit 56bf73379ea1e88323239a3770c33861dc4e404d[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 08:49:38 2026 +0100
+
+    feat: adds user's schema DTO `UsuarioPublic`
+
+[33mcommit c940405ed2adeaf32f91ad229117232bb790f7a1[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 08:47:28 2026 +0100
+
+    feat: create core `dependencies` and `security`
+
+[33mcommit f9075be31e938c8d4cc33d84b2eb151baa35a44d[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 08:46:22 2026 +0100
+
+    docs: adds documentation 2 - Auth Phase
+
+[33mcommit 52de2d8664bda5f7b6b3bc195f53ba79070c6e6b[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 08:45:47 2026 +0100
+
+    chore: deletes `main.py` at root level
+
+[33mcommit 5ad1c5f7ee6e513a6dec58d5f51abb5b7bf4319d[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 18 08:45:13 2026 +0100
+
+    build: adds `bcrypt` directly
+
+[33mcommit fab6ff919cc278811cdcb5e1bc162618dc405174[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Fri Apr 17 21:08:12 2026 +0100
+
+    build: adds config env variables
+
+[33mcommit ec13ec0833580f9f63ca8c4b8036210ed35a18a1[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Fri Apr 17 21:07:03 2026 +0100
+
+    build: add config variable to handle future production issue
+    
+    Changes `echo=True` to `echo=settings.env == "development"`
+
+[33mcommit b592c860232074290c322a255039dcedc8e15951[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Fri Apr 17 21:04:03 2026 +0100
+
+    chore: adds `.idea` to .gitignore
+
+[33mcommit 6b7fba36b0ff718ede79d86ff57db3b9a0154dd3[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Mon Apr 13 11:45:12 2026 +0100
+
+    feat: add migration file
+
+[33mcommit e865a405018900dab24af2cb1643d79c8ffffc92[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Mon Apr 13 11:43:02 2026 +0100
+
+    feat: add `guide_foundacao` file
+
+[33mcommit 6a3855491d0128970e39f34480257562a9680215[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:38:15 2026 +0100
+
+    feat: adiciona Docker compose subindo DB e arquivo de inicialização de DB de teste
+
+[33mcommit 3e555c3440c3cd59ccfce1efee322222ed76d38d[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:37:48 2026 +0100
+
+    feat: adiciona arquivo de configuração assíncrona para alembic
+
+[33mcommit 0356968d8ad2397c75deca539a729faf834e09ee[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:36:17 2026 +0100
+
+    feat: adiciona arquivo `base` para alembic centralizar logica
+
+[33mcommit 4b8a12d67d8c52016143e38e0c852777890afed2[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:34:08 2026 +0100
+
+    feat: cria modelos para as tabelas do DB
+
+[33mcommit 6e07853d6d26c99e7820c2033d13b81595672eae[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:33:06 2026 +0100
+
+    feat: cria `mixins.py` definindo atributos compartilháveis entre diversas tabelas
+
+[33mcommit 3a471657fc58552c60891feab51dcba57307da9b[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:31:59 2026 +0100
+
+    feat: cria arquivo de centralização de conexão com o DB
+
+[33mcommit afbd743013d4f69b24d6b7d2696791c1e117becf[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sun Apr 12 12:30:49 2026 +0100
+
+    feat: adiciona configuração base e variaveis de ambiente
+
+[33mcommit 972845ff1b4d3b2be3504741939d19e48af846c6[m
+Author: zWellingtonLima <0wellingtonlima1@gmail.com>
+Date:   Sat Apr 11 12:36:28 2026 +0100
+
+    feat: initial boilerplate code
