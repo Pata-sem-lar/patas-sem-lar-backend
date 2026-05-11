@@ -11,6 +11,20 @@ from app.models.user import User
 from app.schemas.auth import LoginRequest, RegisterRequest
 
 
+async def user_validity(db: AsyncSession, user_id: str) -> User:
+    result = await db.execute(
+        select(User).where(
+            User.id == user_id,
+            User.deleted_at.is_(None),
+        )
+    )
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=401, detail="Usuário não encontrado")
+
+    return user
+
+
 async def register(db: AsyncSession, data: RegisterRequest) -> tuple[str, str, User]:
     result = await db.execute(
         select(User).where(
@@ -72,15 +86,7 @@ async def refresh(
     if not user_id:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-    result = await db.execute(
-        select(User).where(
-            User.id == user_id,
-            User.deleted_at.is_(None),
-        )
-    )
-    user = result.scalar_one_or_none()
-    if user is None:
-        raise HTTPException(status_code=401, detail="Usuário não encontrado")
+    user = user_validity(db, user_id)
 
     access_token = security.create_access_token({"sub": user.id, "role": user.role})
     return access_token, user
