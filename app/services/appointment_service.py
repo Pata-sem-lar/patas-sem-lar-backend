@@ -70,7 +70,8 @@ async def list_available_slots(
     )
     booked = list(result_appointments.scalars().all())
 
-    duration = timedelta(minutes=offering.duration_minutes)
+    effective_duration = offering.duration_override if offering.duration_override is not None else offering.service.default_duration_minutes
+    duration = timedelta(minutes=effective_duration)
     slots: list[AvailableSlot] = []
     cursor = datetime.combine(query_date, schedule.start_time).replace(tzinfo=timezone.utc)
     shift_end = datetime.combine(query_date, schedule.end_time).replace(tzinfo=timezone.utc)
@@ -131,7 +132,8 @@ async def create_appointment(
     if starts_at.tzinfo is None:
         starts_at = starts_at.replace(tzinfo=timezone.utc)
 
-    ends_at = starts_at + timedelta(minutes=offering.duration_minutes)
+    effective_duration = offering.duration_override if offering.duration_override is not None else offering.service.default_duration_minutes
+    ends_at = starts_at + timedelta(minutes=effective_duration)
 
     # Final conflict check across every store this professional works in.
     conflict = await db.execute(
